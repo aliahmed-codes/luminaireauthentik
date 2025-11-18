@@ -90,9 +90,10 @@ export default class QuoteImagesTrail extends Component {
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: this.element,
-                start: 'top 80%',
+                start: 'top center', // Animation starts when top of section reaches center of viewport
                 end: 'top 20%',
                 toggleActions: 'play none none none',
+                // markers: true, // Uncomment to debug scroll trigger positions
             }
         });
 

@@ -1,0 +1,183 @@
+@use "../shared/grids" as *;
+@use "../shared/titles" as *;
+@use "../shared/labels" as *;
+@use "../shared/descriptions" as *;
+
+@use "../utils/variables" as *;
+@use "../utils/mixins" as *;
+
+.slider__text {
+  margin-top: 11rem;
+
+  .slider__text__container {
+    @extend %grid-12;
+    position: relative;
+
+    .slider__text__content {
+      grid-column: 1/6;
+      padding-inline: $gutter-10;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      &__heading {
+        @extend %title-80;
+
+        margin-bottom: 3rem;
+        color: $color-blackish-brown;
+        padding-right: 4.5rem;
+      }
+
+      &__text {
+        @extend %description-15;
+
+        color: $color-blackish-brown;
+      }
+
+      &__cta {
+        margin-top: 4rem;
+        width: max-content;
+      }
+
+      .slider__text__pagination {
+        @extend %label-14;
+
+        position: absolute;
+        top: 0;
+        right: $gutter-10;
+        color: $color-blackish-brown;
+      }
+
+      .slider__text__navigation {
+        position: absolute;
+        bottom: 0;
+        left: $gutter-10;
+
+        .slider__btns {
+          display: flex;
+          gap: $gutter-10;
+
+          .slider__btn {
+            width: 5rem;
+            height: 5rem;
+            background-color: $color-apricot-ice;
+            border-radius: 10rem;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            cursor: pointer;
+            color: $color-blackish-brown;
+            transition: background-color 0.3s ease;
+
+            &:hover {
+              background-color: $color-blackish-brown;
+              color: $color-apricot-ice;
+            }
+
+            span {
+              @extend %center;
+              width: 100%;
+              height: 100%;
+              position: absolute;
+              top: 0;
+              left: 0;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              transition: transform 0.5s ease;
+
+              svg {
+                width: 2rem;
+                height: 2rem;
+              }
+
+              &:nth-child(1) {
+                transform: translateX(0);
+              }
+
+              &:nth-child(2) {
+                transform: translateX(100%);
+              }
+            }
+          }
+
+          .slide__next:hover {
+            span:nth-child(1) {
+              transform: translateX(-100%);
+            }
+
+            span:nth-child(2) {
+              transform: translateX(0);
+            }
+          }
+
+          .slide__pervious {
+            span:nth-child(2) {
+              transform: translateX(-100%);
+            }
+
+            &:hover {
+              span:nth-child(1) {
+                transform: translateX(100%);
+              }
+
+              span:nth-child(2) {
+                transform: translateX(0);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .slider__text__slider__container {
+      grid-column: 6/13;
+      position: relative;
+      border-radius: 0.5rem;
+      width: 100%;
+      overflow: hidden;
+      // Remove background red after testing
+
+      .slider__text__slider {
+        display: flex;
+        height: 100%;
+        width: 100%;
+        // GSAP will handle the transform
+        will-change: transform;
+
+        .slider__text__slide {
+          flex-shrink: 0; // Prevent slides from shrinking
+          width: 46.7rem;
+          margin-right: $gutter-10;
+
+          &:last-child {
+            margin-right: 0; // Remove margin from last slide
+          }
+
+          .slider__text__slide__media {
+            width: 100%;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            position: relative;
+
+            &__image {
+              width: 100%;
+              height: auto;
+              display: block;
+              will-change: transform; // Optimize for animation
+            }
+          }
+
+          .slider__text__slide__title {
+            @extend %description-17;
+
+            margin-top: 1.5rem;
+            color: $color-blackish-brown;
+            // Initial state handled by GSAP
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,9 +1,19 @@
 @use "../utils/variables" as *;
 
+%title-45 {
+  font-size: 4.5rem;
+  line-height: 1.15;
+  font-weight: 400;
+  letter-spacing: -0.02rem;
+
+  font-family: $font-pp-editorial-new;
+}
+
 %title-60 {
   font-size: 6rem;
   line-height: 1.1;
   font-weight: 400;
+  letter-spacing: -0.02rem;
 
   font-family: $font-pp-editorial-new;
 }
@@ -12,6 +22,7 @@
   font-size: 8rem;
   line-height: 0.94;
   font-weight: 400;
+  letter-spacing: -0.02rem;
 
   font-family: $font-pp-editorial-new;
 }

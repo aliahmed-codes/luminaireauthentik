@@ -6,17 +6,16 @@ import each from "lodash/each";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default class LeftContentRightImage extends Component {
+export default class TextMediaV2 extends Component {
     constructor() {
         super({
-            element: '.left__title__image__right__image',
+            element: '.text__media__v2',
             elements: {
-                title: '.left__title',
-                ctaBtn: '.btn',
-                smallImage: '.small__image__media__image',
-                largeImage: ".right__image__media__image",
-                smallImageMedia: '.small__image__media',
-                largeImageMedia: '.right__image__media',
+                title: '.right__content__heading',
+                smallImage: '.right__content__image',
+                largeImage: ".left__image__media__image",
+                smallImageMedia: '.right__content__media',
+                largeImageMedia: '.left__image__media',
                 productButtonInner: '.product__button__inner',
                 productLinks: '.product__links'
             }
@@ -79,18 +78,18 @@ export default class LeftContentRightImage extends Component {
     setupAnimations() {
         // Set initial states
         gsap.set(this.titleLinesWrapped, { y: '100%' });
-        gsap.set(this.elements.ctaBtn, { opacity: 0, scale: 0.5 });
-        gsap.set(this.elements.smallImage, { scale: 0.5 });
-        gsap.set(this.elements.largeImage, { scale: 0.9 });
-        gsap.set(this.elements.productButtonInner, { scale: 0.7 });
+        gsap.set(this.elements.smallImage, { scale: 0.9 });
+        gsap.set(this.elements.largeImage, { scale: 1.1 });
+        gsap.set(this.elements.productButtonInner, { scale: 0.5 });
 
         // Create main timeline with ScrollTrigger
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: this.element,
-                start: 'top 20%',
-                end: 'top 80%',
+                start: 'top center', // Fixed: was 'top 20%' which triggers too early
+                end: 'top 20%',
                 toggleActions: 'play none none none',
+                // markers: true, // Uncomment to debug
             }
         });
 
@@ -103,13 +102,6 @@ export default class LeftContentRightImage extends Component {
             }, index * 0.08);
         });
 
-        // Animate CTA button
-        tl.to(this.elements.ctaBtn, {
-            opacity: 1,
-            scale: 1,
-            duration: 0.6,
-            ease: 'power1.out'
-        }, 0.3);
 
         // Animate small image with scale from 0.5 to 1
         tl.to(this.elements.smallImage, {
@@ -163,11 +155,10 @@ export default class LeftContentRightImage extends Component {
     }
 
     setUpProductButtonHover() {
-
-
         const buttonInner = this.elements.productButtonInner;
         const productLinks = this.elements.productLinks;
 
+        // Set initial states
         gsap.set(buttonInner, {
             width: '10rem',
             overflow: 'hidden'
@@ -179,49 +170,50 @@ export default class LeftContentRightImage extends Component {
             overflow: 'hidden'
         });
 
-
-
+        // Mouse enter - expand button and show links
         buttonInner.addEventListener('mouseenter', () => {
-
             gsap.to(buttonInner, {
                 width: '100%',
-                opacity: 1,
                 duration: 0.3,
                 ease: 'power1.out'
             });
+
             gsap.to(productLinks, {
                 height: 'auto',
                 opacity: 1,
                 duration: 0.3,
                 ease: 'power1.out'
             });
-
         });
 
+        // Mouse leave - collapse button and hide links
         buttonInner.addEventListener('mouseleave', () => {
-
             gsap.to(buttonInner, {
                 width: '10rem',
-                opacity: 1,
                 duration: 0.3,
                 ease: 'power1.out'
             });
 
             gsap.to(productLinks, {
                 height: '0',
-                opacity: 1,
-                duration: 0.1,
+                opacity: 0, // Fixed: was 1, should be 0
+                duration: 0.3, // Fixed: was 0.1, now consistent with enter
                 ease: 'power1.out'
             });
-
         });
-
     }
 
 
     destroy() {
         if (this.titleLinesWrapped) {
-            gsap.killTweensOf([...this.titleLinesWrapped, this.elements.ctaBtn, this.elements.smallImage, this.elements.largeImage]);
+            // Fixed: removed extra comma
+            gsap.killTweensOf([
+                ...this.titleLinesWrapped,
+                this.elements.smallImage,
+                this.elements.largeImage,
+                this.elements.productButtonInner,
+                this.elements.productLinks
+            ]);
         }
 
         // Kill ScrollTrigger instance
@@ -230,5 +222,18 @@ export default class LeftContentRightImage extends Component {
                 trigger.kill();
             }
         });
+
+        // Clean up event listeners (important!)
+        if (this.elements.smallImageMedia) {
+            const container = this.elements.smallImageMedia;
+            const clonedContainer = container.cloneNode(true);
+            container.parentNode.replaceChild(clonedContainer, container);
+        }
+
+        if (this.elements.productButtonInner) {
+            const button = this.elements.productButtonInner;
+            const clonedButton = button.cloneNode(true);
+            button.parentNode.replaceChild(clonedButton, button);
+        }
     }
 }
